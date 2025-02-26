@@ -10,52 +10,52 @@ spec:
   csi:
     driver: ebs.csi.aws.com
     fsType: ext4
-    volumeHandle: vol-0f79b83a871c189ac
+    volumeHandle: vol-06f48cc07de5313e5
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: ebs-static
-spec:
-  storageClassName: "" # Empty string must be explicitly set otherwise default StorageClass
-  volumeName: ebs-static
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage:  5Gi
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: ebs-static
-  labels:
-    purpose: ebs-static
-spec:
-  nodeSelector:
-    topology.kubernetes.io/zone: us-east-1b
-  containers:
-  - name: nginx
-    image:  nginx
-    volumeMounts: # docker run -v hostpath:containerpath
-    - name: ebs-static
-      mountPath:  /usr/share/nginx/html
-  volumes:
-  - name: ebs-static
-    persistentVolumeClaim:
-      claimName:  ebs-static
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: nginx
-spec:
-  type: LoadBalancer
-  selector:
-    purpose: ebs-static
-  ports:
-  - name: nginx-svc-port
-    protocol: TCP
-    port: 80 # service port
-    targetPort: 80 # container port
-    nodePort: 30007
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: ebs-static
+# spec:
+#   storageClassName: "" # Empty string must be explicitly set otherwise default StorageClass
+#   volumeName: ebs-static
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage:  5Gi
+# ---
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: ebs-static
+#   labels:
+#     purpose: ebs-static
+# spec:
+#   nodeSelector:
+#     topology.kubernetes.io/zone: us-east-1b
+#   containers:
+#   - name: nginx
+#     image:  nginx
+#     volumeMounts: # docker run -v hostpath:containerpath
+#     - name: ebs-static
+#       mountPath:  /usr/share/nginx/html
+#   volumes:
+#   - name: ebs-static
+#     persistentVolumeClaim:
+#       claimName:  ebs-static
+# ---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: nginx
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     purpose: ebs-static
+#   ports:
+#   - name: nginx-svc-port
+#     protocol: TCP
+#     port: 80 # service port
+#     targetPort: 80 # container port
+#     nodePort: 30007
